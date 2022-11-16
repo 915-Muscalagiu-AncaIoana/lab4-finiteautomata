@@ -4,7 +4,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 
 public class FiniteAutomata {
     List<String> states = new ArrayList<>();
@@ -68,9 +71,9 @@ public class FiniteAutomata {
     }
 
     public Boolean isDFA(){
-        HashMap<Tuple<String,String>,String> tuples = new HashMap<>();
+        HashMap<Pair<String,String>,String> tuples = new HashMap<>();
         for (Transition transition : transitionList){
-            Tuple tuple = new Tuple(transition.startState,transition.symbolTransition);
+            Pair tuple = new Pair(transition.startState,transition.symbolTransition);
             if (tuples.containsKey(tuple)){
                 return false;
             }
@@ -82,21 +85,19 @@ public class FiniteAutomata {
     }
 
 
-    public Boolean isSequenceAccepted(String currentState , String sequence){
-        if(sequence.isEmpty() && finalStates.contains(currentState)){
-            return true;
+    public Boolean isSequenceAccepted(String[] sequence){
+        var state = initialState;
+        for (String letter : sequence) {
+            String newState = null;
+            for (Transition transition : transitionList)
+                if (transition.startState.equals(state) && transition.symbolTransition.equals(letter)) {
+                    newState = transition.endState;
+                    break;
+                }
+            if (newState == null)
+                return false;
+            state = newState;
         }
-        if(sequence.isEmpty()){
-            return false;
-        }
-
-        for(Transition transition : transitionList){
-            if(Objects.equals(transition.startState, currentState) && String.valueOf(sequence.charAt(0)).equals(transition.symbolTransition)){
-                Boolean result = isSequenceAccepted(transition.endState,sequence.substring(1));
-                if(result)
-                    return true;
-            }
-        }
-        return false;
+        return finalStates.contains(state);
     }
 }

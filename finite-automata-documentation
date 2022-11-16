@@ -1,0 +1,50 @@
+link to Github:
+ - finite automata simple : https://github.com/915-Muscalagiu-AncaIoana/lab4-finiteautomata
+ - finite automata integrated in scanner : https://github.com/915-Muscalagiu-AncaIoana/lab2-lftc
+
+class: FiniteAutomata
+ - class responsible for holding all the parameters of a finite automata : the list of states, the alphabet,
+ the initial state, the list of final states and the list of transitions.
+void parseInputFile()
+- function responsible for parsing the FA.in file to retrieve the parameters of the finite automata: the list of states, the alphabet,
+the initial state, the list of final states and the list of transitions ; the function parses the file according to the structure mentioned below:
+
+FA.in structure
+non_zero_digit = "1"|"2"| .. |"9"
+digit = "0"|"1"|..|"9"
+number = non_zero_digit{digit}
+letter = "a"|"b"|..|"z"|"A"|"B"..|"Z"
+character = letter | digit | "$" | "_"
+state = letter{character}
+firstLine = state{","state}
+secondLine =character{","character}
+thirdLine = state
+fourthLine = state{","state}
+tuple = state","character","state
+transition = triple"\n"
+inputFile = firstLine"\n"secondLine"\n"thirdLine"\n"fourthLine"\n"{transition}
+
+public Boolean isDFA()
+- function responsible for checking if the finite automata is a DFA or not. The function creates a hashmap with keys being
+pairs of state and symbol which have the value the state we can get to from the state held by the key by applying a transition with that symbol. We
+iterate through all the transitions and add them to the hashmap. If we find a transition for which the key (startState, symbol) already exists in the hashmap
+it means that the FiniteAutomata is not a DFA and we return false. If we finish adding all the transitions to the hashmap then the finite automata is
+a DFA so the function returns true.
+
+public Boolean isSequenceAccepted(String currentState , String sequence)
+currentState: the current state we are in
+sequence: the sequence to be accepted by the finite automata
+- function which is responsible for checking if a sequence is accepted by the finite automata. The function is recursive with the following base cases:
+*if we have reached an empty sequence and the current state is final then the sequence was accepted by the finite automata and we return true
+*if we have reached an emoty sequence but the current state is not final then the sequence was not accepted by the finite automata through this path and we return false
+On the main case we iterate through all the transitions and try all the transitions that match our next character in the sequence and check for the rest of the
+sequence if it is accepted by the automata. If the result of the recursion is true then it means we have found a solution and return true. If we have iterated through all
+the transitions and we did not find a solution it means we cannot proceed from this state to form the remaining sequence and we return a false.
+
+class: Transition
+ - class responsible for holding all the parameters of a transition : the from state, the symbol of the transition and the state we can get to after applying that transition
+
+Class: Pair
+- class which groups two generic objects, a key and a value
+
+

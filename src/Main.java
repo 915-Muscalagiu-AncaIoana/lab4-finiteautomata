@@ -52,7 +52,7 @@ public class Main {
                         System.out.println("Input sequence : ");
                         scanner.nextLine();
                         String sequence = scanner.nextLine();
-                        System.out.println(finiteAutomata.isSequenceAccepted(finiteAutomata.initialState,sequence));
+                        System.out.println(finiteAutomata.isSequenceAccepted(sequence.split("")));
                     }
                     break;
                 default:
